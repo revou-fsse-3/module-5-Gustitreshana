@@ -147,7 +147,7 @@ function Navbar() {
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar
                   alt="Gusti TH"
-                  src="/WeatherApp/src/assets/Modern_Black_Portrait.jpeg"
+                  src="#"
                 />
               </IconButton>
             </Tooltip>
