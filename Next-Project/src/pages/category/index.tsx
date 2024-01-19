@@ -1,6 +1,8 @@
 import Layout from "@/Layout/MainLayout";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { useRouter } from 'next/router';
+
 
 interface Category {
   id: string;
@@ -15,6 +17,8 @@ const CategoryPage = () => {
   const [error, setError] = useState<string | null>(null);
   const token = window.sessionStorage.getItem("token");
 
+  const router = useRouter();
+  
   const headers = {
     Authorization: `Bearer ${token}`,
   };
@@ -44,13 +48,12 @@ const CategoryPage = () => {
       });
   };
 
-  const handleEdit = (categoryId: String) => {
-    // Menangani aksi edit
-    console.log("Edit category with ID:", categoryId);
-  };
+
+  const handleEdit = (categoryId: string) => {
+  router.push(`/category/updateCategory?id=${categoryId}`);
+};
 
   const handleDelete = async (categoryId: String) => {
-    // Menangani aksi hapus
     console.log("Delete category with ID:", categoryId);
     await fetch("https://mock-api.arikmpt.com/api/category/" + categoryId, {
       method: "DELETE",
