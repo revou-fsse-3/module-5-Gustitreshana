@@ -1,5 +1,5 @@
 import Layout from "@/Layout/MainLayout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GetServerSidePropsContext } from "next";
 
 interface UpdateCategoryProps {
@@ -38,7 +38,7 @@ const UpdateCategory: React.FC<UpdateCategoryProps> = ({
       console.log("Updated Category:", updatedCategory);
 
       const response = await fetch(
-        `https://mock-api.arikmpt.com/api/category/update/${initialCategoryData.id}`,
+        `https://mock-api.arikmpt.com/api/category/update`,
         {
           method: "PUT",
           headers: {
@@ -51,13 +51,12 @@ const UpdateCategory: React.FC<UpdateCategoryProps> = ({
 
       console.log("Response Status:", response.status);
 
-      if (response.ok) {
-        console.log("Category updated successfully");
-      } else {
-        setError("Failed to update category.");
+      if (!response.ok) {
+        setError("Category not found or an error occurred.");
         console.error("Update category error:", await response.text());
+      } else {
+        console.log("Category updated successfully");
       }
-      console.log("Category updated successfully");
     } catch (error) {
       setError("Failed to update category.");
       console.error("Update category error:", error);
@@ -123,6 +122,7 @@ export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
   const categoryId = context.query.id;
+  console.log("Category ID from URL:", categoryId);
   const response = await fetch(
     `https://mock-api.arikmpt.com/api/category/${categoryId}`
   );
