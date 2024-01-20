@@ -31,7 +31,7 @@ const CategoryPage = () => {
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Failed to fetch categories.");
+          throw new Error("Failed to fetch categories, you must login first!");
         }
         return response.json();
       })
