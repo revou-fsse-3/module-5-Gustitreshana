@@ -1,5 +1,6 @@
 import Layout from "../../components/Layout/MainLayout";
 import { Formik, Field, Form, ErrorMessage } from "formik";
+import { SubmitHandler, useForm } from "react-hook-form";
 import Link from "next/link";
 import * as Yup from "yup";
 
@@ -13,6 +14,12 @@ interface Form {
 }
 
 const LoginPage = ({ onSubmit }: Props) => {
+
+  const {
+    register,
+    handleSubmit,
+  } = useForm<Form>();
+
   const initialValues = {
     email: "",
     password: "",
@@ -31,7 +38,7 @@ const LoginPage = ({ onSubmit }: Props) => {
       ),
   });
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmitt = async (values: any) => {
     try {
       const response = await fetch(
         "https://mock-api.arikmpt.com/api/user/login",
@@ -60,7 +67,7 @@ const LoginPage = ({ onSubmit }: Props) => {
     }
   };
 
-//   const submit: SubmitHandler<Form> = (data: Form) => onSubmit(data)
+  const submit: SubmitHandler<Form> = (data: Form) => onSubmit(data);
 
   return (
     <div>
@@ -81,22 +88,16 @@ const LoginPage = ({ onSubmit }: Props) => {
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={(values, { setSubmitting }) => {
-              // Panggil prop onSubmit di sini
               onSubmit(values);
               setSubmitting(false);
             }}
           >
-            <Form>
+            <Form onSubmit={handleSubmit(submit)}>
               <div className="mb-4">
                 <label htmlFor="email" className="block text-gray-700">
                   Email
                 </label>
-                <Field
-                  type="email"
-                  id="email"
-                  name="email"
-                  className="w-full border rounded p-2 text-black"
-                />
+                <input type="email" {...register("email", {required : true})} placeholder="email"/>
                 <ErrorMessage
                   name="email"
                   component="div"
@@ -107,12 +108,7 @@ const LoginPage = ({ onSubmit }: Props) => {
                 <label htmlFor="password" className="block text-gray-700">
                   Password
                 </label>
-                <Field
-                  type="password"
-                  id="password"
-                  name="password"
-                  className="w-full border rounded p-2 text-black"
-                />
+                <input type="password" {...register("password", {required : true})} placeholder="password" />
                 <ErrorMessage
                   name="password"
                   component="div"
@@ -122,6 +118,7 @@ const LoginPage = ({ onSubmit }: Props) => {
               <div className="mt-6">
                 <button
                   type="submit"
+                  data-testid="login-button"
                   className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-96"
                 >
                   Login now!
